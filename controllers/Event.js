@@ -3,7 +3,7 @@
 const mongoose = require("mongoose");
 const Blog = require("../models/blog");
 
-exports.getAllBlogs = async (req, res) => {
+exports.getAllEvents = async (req, res) => {
     try {
         const blogs = await Blog.find({});
         res.status(200).json({
@@ -15,7 +15,7 @@ exports.getAllBlogs = async (req, res) => {
     }
 }
 
-exports.getBlogById = async (req, res) => {
+exports.getEventById = async (req, res) => {
     const { id } = req.params;
     try {
         const blog = await Blog.findById(id);

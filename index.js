@@ -17,14 +17,14 @@ app.use(
 	})
 )
 
-app.use("/api/v1", allRoutes);
-
 app.get("/", (req, res) => {
 	return res.json({
 		success:true,
 		message:'Your server is up and running....'
 	});
 });
+
+app.use("/api/v1", allRoutes);
 
 app.listen(PORT, () => {
 	console.log(`App is running at ${PORT}`)
