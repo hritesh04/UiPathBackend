@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
-const Member = require("../models/member");
+const Blog = require("../models/blog");
 
-exports.getAllMembers = async (req, res) => {
+exports.getAllBlogs = async (req, res) => {
     try {
-        const members = await Member.find({});
+        const blogs = await Blog.find({});
         res.status(200).json({
-            data: members,
+            data: blogs,
             success: true,
         });
     } catch (error) {
@@ -13,15 +13,16 @@ exports.getAllMembers = async (req, res) => {
     }
 }
 
-exports.getMemberById = async (req, res) => {
+exports.getBlogById = async (req, res) => {
     const { id } = req.params;
     try {
-        const member = await Member.findById(id);
+        const blog = await Blog.findById(id);
         res.status(200).json({
-            data: member,
+            data: blog,
             success: true,
         });
-    } catch (error) {
+    }
+    catch (error) {
         res.status(404).json({ message: error.message });
     }
 }

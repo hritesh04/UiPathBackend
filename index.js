@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const { connectToDb } = require("./database");
 const cors = require("cors");
+const allRoutes = require("./routes/routes");
 
 require('dotenv').config();
 const PORT = process.env.PORT || 4000;
@@ -15,6 +16,8 @@ app.use(
 		credentials:true,
 	})
 )
+
+app.use("/api/v1", allRoutes);
 
 app.get("/", (req, res) => {
 	return res.json({
