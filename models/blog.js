@@ -23,7 +23,10 @@ const blogSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    author: memberSchema,
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Member",
+    },
     image_url: {
       type: String,
       trim: true,

@@ -23,7 +23,7 @@ const gallerySchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    photos: [photoSchema],
+    photos: [String],
   },
   {
     timestamps: true,

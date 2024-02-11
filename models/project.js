@@ -23,10 +23,6 @@ const projectSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    logo_url: {
-      type: String,
-      trim: true,
-    },
     image_url: {
       type: String,
       trim: true,
@@ -39,7 +35,12 @@ const projectSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    made_by: memberSchema,
+    made_by: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Member",
+      },
+    ],
   },
   {
     timestamps: true,
