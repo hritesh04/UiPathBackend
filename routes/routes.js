@@ -38,35 +38,37 @@ const {
   updateGallery,
 } = require("../controllers/gallery");
 
+const { adminAuth } = require("../utils/middleware");
+
 router.post("/admin", adminLogin);
 
 router.get("/events", getAllEvents); //
 router.get("/events/:id", getEventById); //
-router.post("/events", addNewEvent); //
-router.patch("/events", updateEvent); //
-router.delete("/events", removeEvent); //
+router.post("/events", adminAuth, addNewEvent); //
+router.patch("/events", adminAuth, updateEvent); //
+router.delete("/events", adminAuth, removeEvent); //
 
 router.get("/projects", getAllProjects); //
 router.get("/projects/:id", getProjectById); //
-router.post("/projects", addNewProject); //
-router.patch("/projects", updateProject); //
-router.delete("/projects", removeProject); //
+router.post("/projects", adminAuth, addNewProject); //
+router.patch("/projects", adminAuth, updateProject); //
+router.delete("/projects", adminAuth, removeProject); //
 
 router.get("/blogs", getAllBlogs); //
 router.get("/blogs/:id", getBlogById); //
-router.post("/blogs", addNewBlog); //
-router.delete("/blogs", removeBlog); //
+router.post("/blogs", adminAuth, addNewBlog); //
+router.delete("/blogs", adminAuth, removeBlog); //
 
 router.get("/gallery", getAllGallery); //
 router.get("/gallery/:id", getGalleryById); //
-router.post("/gallery", addNewGallery); //
-router.patch("/gallery", updateGallery); //
-router.delete("/gallery", deleteGallery); //
+router.post("/gallery", adminAuth, addNewGallery); //
+router.patch("/gallery", adminAuth, updateGallery); //
+router.delete("/gallery", adminAuth, deleteGallery); //
 
 router.get("/members", getAllMembers); //
 router.get("/members/:id", getMemberById); //
-router.post("/members", addNewMember); //
-router.patch("/members", updateMember); //
-router.delete("/members", removeMember); //
+router.post("/members", adminAuth, addNewMember); //
+router.patch("/members", adminAuth, updateMember); //
+router.delete("/members", adminAuth, removeMember); //
 
 module.exports = router;
