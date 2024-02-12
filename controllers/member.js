@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Member = require("../models/member");
+const jwt = require("jsonwebtoken");
 
 function validateEmail(email) {
   var re = /\S+@\S+\.\S+/;
@@ -42,6 +43,7 @@ exports.addNewMember = async (req, res) => {
     githubLink,
     instaLink,
     LinkedInLink,
+    isAdmin,
   } = req.body;
 
   try {
@@ -59,6 +61,7 @@ exports.addNewMember = async (req, res) => {
       github_link: githubLink,
       insta_link: instaLink,
       linkedin_link: LinkedInLink,
+      isAdmin,
     });
 
     await newMember.save().catch((err) => {
@@ -91,6 +94,7 @@ exports.updateMember = async (req, res) => {
     githubLink,
     instaLink,
     LinkedInLink,
+    isAdmin,
   } = req.body;
 
   try {
@@ -113,12 +117,13 @@ exports.updateMember = async (req, res) => {
       (member.github_link = githubLink),
       (member.insta_link = instaLink),
       (member.linkedin_link = LinkedInLink),
-      await member.save().catch((err) => {
-        if (err.code === 11000) {
-          throw new Error("Email already exists");
-        }
-        throw new Error("Error while saving " + err.message);
-      });
+      (member.isAdmin = isAdmin);
+    await member.save().catch((err) => {
+      if (err.code === 11000) {
+        throw new Error("Email already exists");
+      }
+      throw new Error("Error while saving " + err.message);
+    });
 
     res.status(200).json({
       data: member,
@@ -161,8 +166,16 @@ exports.adminLogin = async (req, res) => {
     if (admin.password !== password) {
       throw new Error("Wrong password");
     }
+    if (admin.isAdmin === false) {
+      throw new Error("Not an Admin");
+    }
+
+    const adminId = admin.toJSON();
+    console.log(adminId);
+    const token = jwt.sign(adminId.email, process.env.SECRET);
+
     res.status(200).json({
-      data: admin,
+      data: { admin, token },
       success: true,
     });
   } catch (err) {
