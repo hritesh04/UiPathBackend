@@ -39,6 +39,12 @@ const {
 } = require("../controllers/gallery");
 
 const { adminAuth } = require("../utils/middleware");
+const {
+  getAllPosts,
+  addNewPost,
+  deletePost,
+  getPostById,
+} = require("../controllers/Posts");
 
 router.post("/admin", adminLogin);
 
@@ -70,5 +76,10 @@ router.get("/members/:id", getMemberById); //
 router.post("/members", adminAuth, addNewMember); //
 router.patch("/members", adminAuth, updateMember); //
 router.delete("/members", adminAuth, removeMember); //
+
+router.get("/post", getAllPosts); //
+router.get("/post/:id", getPostById); //
+router.post("/post", adminAuth, addNewPost); //
+router.delete("/post", adminAuth, deletePost); //
 
 module.exports = router;
