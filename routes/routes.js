@@ -28,7 +28,7 @@ const {
   removeMember,
   adminLogin,
   updateMember,
-} = require("../controllers/Member");
+} = require("../controllers/member");
 
 const {
   getAllGallery,
