@@ -38,25 +38,26 @@ exports.addNewMember = async (req, res) => {
     email,
     password,
     domain,
-    image,
     position,
     githubLink,
     instaLink,
     LinkedInLink,
     isAdmin,
   } = req.body;
-
+  const files = req.files;
   try {
     if (!validateEmail(email)) {
       throw new Error("Invalid Email");
     }
+
+    const imgUrl = uploadImages(files);
 
     const newMember = new Member({
       name,
       email,
       password,
       domain,
-      image,
+      image: imgUrl[0],
       position,
       github_link: githubLink,
       insta_link: instaLink,
@@ -96,7 +97,7 @@ exports.updateMember = async (req, res) => {
     LinkedInLink,
     isAdmin,
   } = req.body;
-
+  const files = req.files;
   try {
     if (!validateEmail(email)) {
       throw new Error("Invalid Email");
@@ -108,11 +109,16 @@ exports.updateMember = async (req, res) => {
       throw new Error("Invald member id");
     }
 
+    if (files) {
+      const imgUrl = uploadImages(files);
+      console.log(imgUrl);
+      member.image = imgUrl[0];
+    }
+
     (member.name = name),
       (member.email = email),
       (member.password = password),
       (member.domain = domain),
-      (member.image = image),
       (member.position = position),
       (member.github_link = githubLink),
       (member.insta_link = instaLink),

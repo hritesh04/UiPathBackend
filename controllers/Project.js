@@ -27,12 +27,14 @@ exports.getProjectById = async (req, res) => {
 };
 
 exports.addNewProject = async (req, res) => {
-  const { title, description, imgUrl, liveLink, githubLink, madeBy } = req.body;
+  const { title, description, liveLink, githubLink, madeBy } = req.body;
+  const files = req.files;
 
   try {
+    const imgUrl = uploadImages(files);
     const newProject = new Project({
       title,
-      image_url: imgUrl,
+      image_url: imgUrl[0],
       description,
       live_link: liveLink,
       github_link: githubLink,
@@ -56,7 +58,8 @@ exports.addNewProject = async (req, res) => {
 
 exports.updateProject = async (req, res) => {
   const id = req.query.id;
-  const { title, description, imgUrl, liveLink, githubLink, madeBy } = req.body;
+  const { title, description, liveLink, githubLink, madeBy } = req.body;
+  const files = req.files;
 
   try {
     const project = await Project.findById(id);
@@ -64,9 +67,14 @@ exports.updateProject = async (req, res) => {
       throw new Error("Invalid project id");
     }
 
+    if (files) {
+      const imgUrl = uploadImages(files);
+      console.log(imgUrl);
+      project.imgUrl = imgUrl[0];
+    }
+
     project.title = title;
     project.description = description;
-    project.image_url = imgUrl;
     project.live_link = liveLink;
     project.github_link = githubLink;
     project.made_by = [...madeBy];

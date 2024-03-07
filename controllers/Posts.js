@@ -36,16 +36,17 @@ exports.getPostById = async (req, res) => {
 exports.addNewPost = async (req, res) => {
   // photosUrls will have all the urls of the photos stored in object store
 
-  const { title, description, link, domain, type, imgLink } = req.body;
-
+  const { title, description, link, domain, type } = req.body;
+  const files = req.files;
   try {
+    const imgUrl = uploadImages(files);
     const post = new Post({
       title,
       description,
       domain,
       link: link,
       type,
-      img_link: imgLink,
+      img_link: imgUrl[0],
     });
 
     await post.save().catch((err) => {

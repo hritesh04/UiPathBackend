@@ -1,7 +1,6 @@
-// example.js
-
 const mongoose = require("mongoose");
 const Event = require("../models/event");
+const uploadImages = require("../utils/uploadImages");
 
 exports.getAllEvents = async (req, res) => {
   try {
@@ -31,18 +30,18 @@ exports.getEventById = async (req, res) => {
 exports.addNewEvent = async (req, res) => {
   const {
     name,
-    imgUrl,
     description,
     venue,
     eventDate,
     registrationLink,
     registrationStarted,
   } = req.body;
-
+  const files = req.files;
   try {
+    const imgUrl = uploadImages(files);
     const newEvent = new Event({
       name,
-      image_url: imgUrl,
+      image_url: imgUrl[0],
       description,
       venue,
       event_date: eventDate,
@@ -69,7 +68,6 @@ exports.updateEvent = async (req, res) => {
   const id = req.query.id;
   const {
     name,
-    imgUrl,
     description,
     venue,
     eventDate,
@@ -77,14 +75,22 @@ exports.updateEvent = async (req, res) => {
     registrationStarted,
   } = req.body;
 
+  const files = req.files;
+  console.log(files);
+
   try {
     const event = await Event.findById(id);
     if (!event) {
       throw new Error("Invalid event id");
     }
 
+    if (files) {
+      const imgUrl = uploadImages(files);
+      console.log(imgUrl);
+      event.imgUrl = imgUrl[0];
+    }
+
     event.name = name;
-    event.imgUrl = imgUrl;
     event.description = description;
     event.venue = venue;
     event.event_date = eventDate;

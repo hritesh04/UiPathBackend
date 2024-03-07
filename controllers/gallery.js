@@ -1,4 +1,5 @@
 const Gallery = require("../models/gallery");
+const uploadImages = require("../utils/uploadImages");
 
 exports.getAllGallery = async (req, res) => {
   try {
@@ -18,12 +19,13 @@ exports.getAllGallery = async (req, res) => {
 exports.addNewGallery = async (req, res) => {
   // photosUrls will have all the urls of the photos stored in object store
 
-  const { title, description, photoUrls } = req.body;
-
+  const { title } = req.body;
+  const files = req.files;
   try {
+    const photoUrls = uploadImages(files);
+
     const gallery = new Gallery({
       title,
-      description,
       photos: [...photoUrls],
     });
 
@@ -81,7 +83,8 @@ exports.getGalleryById = async (req, res) => {
 
 exports.updateGallery = async (req, res) => {
   const id = req.query.id;
-  const { title, description, photoUrls } = req.body;
+  const { title, description } = req.body;
+  const files = req.files;
 
   try {
     const gallery = await Gallery.findById(id);
@@ -89,9 +92,14 @@ exports.updateGallery = async (req, res) => {
       throw new Error("Invalid gallery id");
     }
 
+    if (files) {
+      const imgUrl = uploadImages(files);
+      console.log(imgUrl);
+      gallery.photos = [...imgUrl];
+    }
+
     gallery.title = title;
     gallery.description = description;
-    gallery.photos = [...photoUrls];
     await gallery.save().catch((err) => {
       throw new Error("Error while Updating the gallery " + err.message);
     });

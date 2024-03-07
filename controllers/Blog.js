@@ -27,12 +27,13 @@ exports.getBlogById = async (req, res) => {
 };
 
 exports.addNewBlog = async (req, res) => {
-  const { title, description, author, imgUrl, date, link } = req.body;
-
+  const { title, description, author, date, link } = req.body;
+  const files = req.files;
   try {
+    const imgUrl = uploadImages(files);
     const newBlog = new Blog({
       title,
-      image_url: imgUrl,
+      image_url: imgUrl[0],
       description,
       author,
       date,
